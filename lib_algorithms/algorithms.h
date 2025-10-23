@@ -3,20 +3,18 @@
 
 #include "stack.h"
 
-// (([{}]))
-
 bool check_breckets(std::string str) {
 	Stack<char> stack(str.size());
-	for (const auto& el : str) {
+	for (const auto el : str) {
 		if (el == '(' || el == '{' || el == '[') stack.push(el);
+		if (stack.is_empty()) return false;
 		else {
-			if (stack.top() == '(' && el == ')') stack.pop();
+			if		(stack.top() == '(' && el == ')') stack.pop();
 			else if (stack.top() == '[' && el == ']') stack.pop();
 			else if (stack.top() == '{' && el == '}') stack.pop();
 			else return false;
 		}
 	}
-	if (!stack.is_empty()) return false;
-	return true;
+	return stack.is_empty();
 }
 #endif
