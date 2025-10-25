@@ -1,8 +1,6 @@
 #ifndef STACK_H_
 #define STACK_H_
 
-#include <iostream>
-
 template <class T>
 class Stack {
 private:
