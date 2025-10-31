@@ -146,3 +146,22 @@ TEST(TestListLib, throw_get_head_correctly) {
 	list.pop_back();
 	EXPECT_ANY_THROW(list.head());
 }
+
+TEST(TestListLib, iterator_test) {
+	List<int> list, empty_list;
+
+	for (size_t i = 0; i < 5; ++i) list.push_back(i);
+	int exp_v = 0;
+	for (List<int>::iterator it = list.begin(); it != list.end(); ++it)
+		EXPECT_EQ(*it, exp_v++);
+	for (List<int>::iterator it = list.begin(); it != list.end(); ++it) {
+		*it = exp_v;
+		EXPECT_EQ(*it, exp_v++);
+	}
+
+	ASSERT_NO_THROW(
+		for (List<int>::iterator it = empty_list.begin(); it != empty_list.end(); ++it)
+			*it = 0;
+	);
+	
+}

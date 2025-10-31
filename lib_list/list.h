@@ -1,6 +1,7 @@
 #ifndef LIST_
 #define LIST_
 
+
 template <class T>
 struct Node {
 	T value;
@@ -32,6 +33,27 @@ public:
 	inline T& head() const;
 	inline T& tail() const;
 	Node<T>* const node(size_t pos) const;
+
+	class Iterator {
+	private:
+		Node<T>* current;
+	public:
+		Iterator() : current(nullptr) {}
+		Iterator(Node<T>* pos) : current(pos) {}
+		Iterator(const Iterator& other) : current(other.current) {}
+
+		Iterator& operator= (const Iterator& other);
+		T& operator* ();
+		bool operator!= (const Iterator& other);
+		Iterator operator++ (int); //x++
+		Iterator& operator++ ();   //++x
+	};
+
+	Iterator begin() const noexcept { return iterator(_head); }
+	Iterator end() const noexcept { return Iterator(); }
+
+	typedef Iterator iterator;
+	
 };
 
 template <class T> List<T>::List(const List& other) : _count(0) {
@@ -93,9 +115,9 @@ template <class T> void List<T>::pop_back() {
 }
 
 template <class T> void List<T>::insert(size_t pos, const T& val) {
-	if (pos >= _count) throw std::logic_error("There is no such position in the list!");
+	if (pos > _count) throw std::logic_error("There is no such position in the list!");
 	else if (pos == 0) push_front(val);
-	else if (pos == (_count - 1)) push_back(val);
+	else if (pos == _count) push_back(val);
 	else {
 		Node<T>* current = _head;
 		while (pos-- - 1) current = current->next;
@@ -159,6 +181,30 @@ template <class T> Node<T>* const List<T>::node(size_t pos) const {
 	Node<T>* current = _head;
 	while (pos--) current = current->next;
 	return current;
+}
+
+template <class T> typename List<T>::Iterator& List<T>::iterator::operator= (const Iterator& other) {
+	this = other.current;
+	return *this;
+}
+
+template <class T> T& List<T>::iterator::operator* () {
+	return this->current->value;
+}
+
+template <class T> bool List<T>::iterator::operator!= (const Iterator& other) {
+	return this->current != other.current;
+}
+
+template <class T> typename List<T>::Iterator List<T>::iterator::operator++ (int) {
+	List<T>::Iterator tmp(*this);
+	current = current->next;
+	return tmp;
+}
+
+template <class T> typename List<T>::Iterator& List<T>::iterator::operator++ () {
+	current = current->next;
+	return *this;
 }
 
 #endif
