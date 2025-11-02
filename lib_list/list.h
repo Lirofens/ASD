@@ -50,7 +50,7 @@ public:
 	};
 
 	Iterator begin() const noexcept { return iterator(_head); }
-	Iterator end() const noexcept { return Iterator(); }
+	Iterator end() const noexcept { return iterator(); }
 
 	typedef Iterator iterator;
 	
