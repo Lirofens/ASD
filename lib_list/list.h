@@ -1,18 +1,22 @@
 #ifndef LIST_
 #define LIST_
 
+template <class T>
+struct DNode;
 
 template <class T>
 struct Node {
 	T value;
 	Node<T> *next;
 	Node(T val, Node<T>* n) : value(val), next(n) {}
+	Node(DNode<T>* node) : value(node->val), next(node->next) {}
 };
 
 template <class T> 
 class List {
 private:
 	Node<T> *_head, *_tail;
+protected:
 	size_t _count;
 public:
 	List() : _head(nullptr), _tail(nullptr), _count(0) {}
@@ -34,25 +38,23 @@ public:
 	inline T& tail() const;
 	Node<T>* const node(size_t pos) const;
 
-	class Iterator {
+	class iterator {
 	private:
 		Node<T>* current;
 	public:
-		Iterator() : current(nullptr) {}
-		Iterator(Node<T>* pos) : current(pos) {}
-		Iterator(const Iterator& other) : current(other.current) {}
+		iterator() : current(nullptr) {}
+		iterator(Node<T>* pos) : current(pos) {}
+		iterator(const iterator& other) : current(other.current) {}
 
-		Iterator& operator= (const Iterator& other);
+		iterator& operator= (const iterator& other);
 		T& operator* ();
-		bool operator!= (const Iterator& other);
-		Iterator operator++ (int); //x++
-		Iterator& operator++ ();   //++x
+		bool operator!= (const iterator& other);
+		iterator operator++ (int); //x++
+		iterator& operator++ ();   //++x
 	};
 
-	Iterator begin() const noexcept { return iterator(_head); }
-	Iterator end() const noexcept { return iterator(); }
-
-	typedef Iterator iterator;
+	iterator begin() const noexcept { return iterator(_head); }
+	iterator end() const noexcept { return iterator(); }
 	
 };
 
@@ -183,7 +185,7 @@ template <class T> Node<T>* const List<T>::node(size_t pos) const {
 	return current;
 }
 
-template <class T> typename List<T>::Iterator& List<T>::iterator::operator= (const Iterator& other) {
+template <class T> typename List<T>::iterator& List<T>::iterator::operator= (const iterator& other) {
 	this = other.current;
 	return *this;
 }
@@ -192,19 +194,74 @@ template <class T> T& List<T>::iterator::operator* () {
 	return this->current->value;
 }
 
-template <class T> bool List<T>::iterator::operator!= (const Iterator& other) {
+template <class T> bool List<T>::iterator::operator!= (const iterator& other) {
 	return this->current != other.current;
 }
 
-template <class T> typename List<T>::Iterator List<T>::iterator::operator++ (int) {
-	List<T>::Iterator tmp(*this);
+template <class T> typename List<T>::iterator List<T>::iterator::operator++ (int) {
+	List<T>::iterator tmp(*this);
 	current = current->next;
 	return tmp;
 }
 
-template <class T> typename List<T>::Iterator& List<T>::iterator::operator++ () {
+template <class T> typename List<T>::iterator& List<T>::iterator::operator++ () {
 	current = current->next;
 	return *this;
 }
+
+template <class T>
+struct DNode {
+	T value;
+	DNode<T> *next, *prev;
+	DNode(T val, DNode<T> *n, DNode<T> *p) : value(val), next(n), prev(p) {}
+};
+
+
+template <class T>
+class DList : public List<T> {
+private:
+	DNode<T> *_head, *_tail;
+public:
+	DList() : _head(nullptr), _tail(nullptr) {}
+	DList(const DList& other);
+	~DList() {
+		while (_count) {
+			DNode<T>* next = _head->next;
+			delete _head;
+			_head = next;
+			--_count;
+		}
+	}
+
+	void push_front(const T& val) noexcept {
+		DNode<T>* new_node = new DNode<T>(val, _head, nullptr);
+		_head = new_node;
+		if (List<T>::is_empty()) _tail = _head;
+		List<T>::_count++;
+	}
+
+	void push_back(const T& val) noexcept {
+		DNode<T>* new_node = new DNode<T>(val, nullptr, _tail);
+		_tail = new_node;
+		if (List<T>::is_empty()) _head = _tail;
+		List<T>::_count++;
+	}
+
+	void pop_front() {
+		if (List<T>::is_empty()) throw std::logic_error("List is empty in pop_front()!");
+		DNode<T>* next = _head->next;
+		delete _head;
+		_head = next;
+		List<T>::_count--;
+	}
+
+	void pop_back() {
+		if (List<T>::is_empty()) throw std::logic_error("List is empty in pop_back()!");
+		DNode<T>* prev = _head->prev;
+		delete _tail;
+		_tail = prev;
+		List<T>::_count--;
+	}
+};
 
 #endif

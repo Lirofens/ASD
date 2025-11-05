@@ -165,3 +165,21 @@ TEST(TestListLib, iterator_test) {
 	);
 	
 }
+
+TEST(TestDListLib, throw_get_head_correctly) {
+	DList<int> list;
+	list.push_back(1);
+	EXPECT_EQ(list.head(), 1);
+	list.pop_back();
+	EXPECT_ANY_THROW(list.head());
+}
+
+TEST(TestDListLib, pop_front_correctly) {
+	DList<int> list;
+	list.push_back(1);
+	list.push_back(2);
+	list.push_back(3);
+	list.pop_front();
+	EXPECT_EQ(list.head(), 2);
+	EXPECT_EQ(list.tail(), 3);
+}
