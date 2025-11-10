@@ -15,10 +15,11 @@ DSU::~DSU() {
 
 void DSU::unite(int x, int y) {
 	if (x == y) throw std::exception("Identical sets.");
-	int rankX = _rank[find(x)], rankY = _rank[find(y)];
-	if (rankX < rankY) _parent[find(x)] = find(y);
-	else if (rankX == rankY) { _rank[find(x)]++; _parent[find(y)] = find(x); }
-	else _parent[find(y)] = find(x);
+	int pX = find(x), pY = find(y);
+	int rankX = _rank[pX], rankY = _rank[pY];
+	if (rankX < rankY) _parent[pX] = pY;
+	else if (rankX == rankY) { _rank[pX]++; _parent[pY] = pX; }
+	else _parent[pY] = pX;
 }
 
 int DSU::find(int x) {
