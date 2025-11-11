@@ -159,12 +159,15 @@ TEST(TestListLib, iterator_test) {
 		EXPECT_EQ(*it, exp_v++);
 	}
 
-	ASSERT_NO_THROW(
+	ASSERT_NO_THROW({
 		for (List<int>::iterator it = empty_list.begin(); it != empty_list.end(); ++it)
 			*it = 0;
+		}
 	);
 	
 }
+
+
 
 TEST(TestDListLib, throw_get_head_correctly) {
 	DList<int> list;
@@ -174,12 +177,44 @@ TEST(TestDListLib, throw_get_head_correctly) {
 	EXPECT_ANY_THROW(list.head());
 }
 
-TEST(TestDListLib, pop_front_correctly) {
+TEST(TestDListLib, push_back_correctly) {
 	DList<int> list;
 	list.push_back(1);
 	list.push_back(2);
 	list.push_back(3);
 	list.pop_front();
+
 	EXPECT_EQ(list.head(), 2);
 	EXPECT_EQ(list.tail(), 3);
+}
+
+TEST(TestDListLib, pop_back_correctly) {
+	DList<int> list;
+	list.push_back(1);
+	list.push_back(2);
+	list.push_back(3);
+	list.pop_back();
+	EXPECT_EQ(list.head(), 1);
+	EXPECT_EQ(list.tail(), 2);
+}
+
+TEST(TestDListLib, iterator_test) {
+	DList<int> list, empty_list;
+
+	for (size_t i = 0; i < 5; ++i) list.push_back(i);
+	int exp_v = 0;
+	for (DList<int>::iterator it = list.begin(); it != list.end(); ++it)
+		EXPECT_EQ(*it, exp_v++);
+	for (DList<int>::iterator it = list.rbegin(); it != list.rend(); --it)
+		EXPECT_EQ(*it, --exp_v);
+	for (DList<int>::iterator it = list.begin(); it != list.end(); ++it) {
+		*it = exp_v;
+		EXPECT_EQ(*it, exp_v++);
+	}
+
+	ASSERT_NO_THROW(
+		for (DList<int>::iterator it = empty_list.begin(); it != empty_list.end(); ++it)
+			*it = 0;
+	);
+
 }
