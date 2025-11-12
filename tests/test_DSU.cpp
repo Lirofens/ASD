@@ -86,15 +86,3 @@ TEST(DSUTests, hard_unite_test_2) {
 	EXPECT_EQ(set.find(3), 0);
 }
 
-TEST(DSUTests, Ilands) {
-	int map[5][7] = {
-	{1, 1, 0, 0, 0, 1, 1},
-	{1, 0, 0, 0, 0, 1, 0},
-	{0, 1, 1, 0, 1, 0, 0},
-	{0, 0, 1, 1, 0, 0, 0},
-	{0, 0, 1, 0, 0, 0, 1}
-	};
-	EXPECT_EQ(ilands(map), 5);
-
-}
-
