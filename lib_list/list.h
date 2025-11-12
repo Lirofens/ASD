@@ -222,6 +222,7 @@ public:
 	DList(const DList& other) : Base(other) {}
 
 	void push_back(const T& val) noexcept;
+	void push_front(const T& val) noexcept;
 	void pop_back();
 
 	class iterator : public Base::iterator {
@@ -255,6 +256,17 @@ template <class T> void DList<T>::push_back(const T& val) noexcept {
 	}
 	Base::_count++;
 }
+
+template <class T> void DList<T>::push_front(const T& val) noexcept {
+        DNode<T>* new_node = new DNode<T>(val, static_cast<DNode<T>*>(Base::_head), nullptr);
+        if (Base::_head)
+            static_cast<DNode<T>*>(Base::_head)->prev = new_node;
+        Base::_head = new_node;
+        if (Base::_tail == nullptr) {
+            Base::_tail = Base::_head;
+        }
+        Base::_count++;
+    }
 
 template <class T> void DList<T>::pop_back() {
 	if (List<T>::is_empty()) throw std::logic_error("List is empty in pop_back()!");

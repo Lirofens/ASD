@@ -21,7 +21,9 @@ private:
     size_t _capacity;
     inline bool is_full() const noexcept { return (_size >= _capacity) ? true : false; }
 public:
-    TVector(size_t size = 0) : _data(new T[calculate_capacity(size)]),
+    TVector() : _data(new T[calculate_capacity(0)]),
+        _size(0), _capacity(calculate_capacity(0)) {}
+    TVector(size_t size) : _data(new T[calculate_capacity(size)]),
         _size(size), _capacity(calculate_capacity(size)) {}
     TVector(const T* data, const size_t size) : _data(new T[calculate_capacity(size)]),
         _size(size), _capacity(calculate_capacity(size)) {
@@ -139,7 +141,7 @@ public:
     };
 
     inline const iterator begin() const noexcept { return iterator(_data); }
-    inline const iterator end() const noexcept { return iterator(_data + _size - 1); }
+    inline const iterator end() const noexcept { return iterator((_size != 0) ? _data + _size - 1 : _data); }
 
     friend inline size_t calculate_capacity(size_t) noexcept;
     friend void quick_sort<T>(TVector<T>&, size_t, size_t) noexcept;

@@ -188,6 +188,17 @@ TEST(TestDListLib, push_back_correctly) {
 	EXPECT_EQ(list.tail(), 3);
 }
 
+TEST(TestDListLib, push_front_correctly) {
+	DList<int> list;
+	list.push_front(1);
+	list.push_front(2);
+	list.push_front(3);
+	list.pop_back();
+
+	EXPECT_EQ(list.head(), 3);
+	EXPECT_EQ(list.tail(), 2);
+}
+
 TEST(TestDListLib, pop_back_correctly) {
 	DList<int> list;
 	list.push_back(1);
