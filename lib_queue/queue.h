@@ -1,4 +1,7 @@
-#include <iostream>
+#ifndef QUEUE_H_
+#define QUEUE_H_
+
+#include <stdexcept>
 
 template <class T>
 class Queue {
@@ -33,3 +36,5 @@ public:
 	inline bool is_empty() const noexcept { return _count == 0; }
 	inline bool is_full() const noexcept { return _count == _size; }
 };
+
+#endif // !QUEUE_H_
