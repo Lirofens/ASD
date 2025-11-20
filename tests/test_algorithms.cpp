@@ -67,3 +67,42 @@ TEST(DSUTests, Ilands_1) {
 	EXPECT_EQ(ilands(map), 1);
 
 }
+TEST(CircleInListTest, hare_and_turtle) {
+	List<int> list;
+	list.push_back(1);
+	list.push_back(2);
+	list.push_back(3);
+	list.push_back(4);
+	list.push_back(5);
+	EXPECT_FALSE(check_circle(list));
+	list.node(4)->next = list.node(1);
+	EXPECT_TRUE(check_circle(list));
+	list.node(4)->next = nullptr;
+}
+
+TEST(CircleInListTest, reversal_of_signs) {
+	List<int> list;
+	list.push_back(1);
+	list.push_back(2);
+	list.push_back(3);
+	list.push_back(4);
+	list.push_back(5);
+	EXPECT_FALSE(check_circle_rev(list.node(0)));
+	list.node(4)->next = list.node(1);
+	EXPECT_TRUE(check_circle_rev(list.node(0)));
+	list.node(4)->next = nullptr;
+}
+
+TEST(CircleInListTest, hare_and_turtle_with_pos) {
+	List<int> list;
+	list.push_back(1);
+	list.push_back(2);
+	list.push_back(3);
+	list.push_back(4);
+	list.push_back(5);
+	EXPECT_FALSE(check_circle_with_pos(list));
+	Node<int>* tmp = list.node(3)->next;
+	list.node(3)->next = list.node(1);
+	EXPECT_EQ(check_circle_with_pos(list)->value, 4);
+	list.node(3)->next = tmp;
+}

@@ -3,7 +3,9 @@
 
 #include "stack.h"
 #include "DSU.h"
+#include "list.h"
 #include <string>
+#include "../third_party/gtest/googletest/include/gtest/internal/gtest-internal.h"
 
 
 bool check_breckets(std::string str) {
@@ -40,4 +42,68 @@ int ilands(int(&mass)[rows][cols]) noexcept {
 		if (map.find(i) == i) count++;
 	return count - count0;
 }
+
+template <class T>
+bool check_circle(const List<T>& list) {
+	List<T>::iterator slow = list.begin();
+	List<T>::iterator fast = slow;
+	while (slow != list.end() || fast != list.end()) {
+		slow++;
+		if (++fast != nullptr) fast++;
+		else break;
+		if (slow == fast) return true;
+	}
+	return false;
+}
+
+template <class T>
+Node<T>* check_circle_with_pos(const List<T>& list) {
+	Node<T>* slow = list.node(0);
+	Node<T>* fast = slow;
+	while (slow != fast || slow == list.node(0)) {
+		if (slow->next != nullptr)
+			slow = slow->next;
+		if (fast->next != nullptr)
+			fast = fast->next->next;
+		if (slow == fast && !fast->next) return nullptr;
+		if (slow == fast) return fast;
+	}
+	return fast;
+}
+
+template <class T>
+bool check_circle_rev(Node<T> *head) {
+	Node<T>* prev = nullptr;
+	Node<T>* cur = head;
+	Node<T>* next = nullptr;
+	while (cur) {
+		next = cur->next;
+		if (next == head) {
+			cur = prev;
+			prev = next = nullptr;
+			while (cur) {
+				next = cur->next;
+				cur->next = prev;
+				prev = cur;
+				cur = next;
+			}
+			return true;
+		}
+		cur->next = prev;
+		prev = cur;
+		cur = next;
+	}
+
+	cur = prev;
+	prev = next = nullptr;
+	while (cur) {
+		next = cur->next;
+		cur->next = prev;
+		prev = cur;
+		cur = next;
+	}
+	return false;
+}
+
+
 #endif

@@ -45,6 +45,8 @@ public:
 		Iterator& operator= (const Iterator& other);
 		T& operator* ();
 		bool operator!= (const Iterator& other);
+		bool operator== (const Iterator& other);
+		Iterator operator+= (size_t n);
 		Iterator operator++ (int); //x++
 		Iterator& operator++ ();   //++x
 	};
@@ -196,8 +198,17 @@ template <class T> bool List<T>::iterator::operator!= (const Iterator& other) {
 	return this->current != other.current;
 }
 
+template <class T> bool List<T>::iterator::operator== (const Iterator& other) {
+	return this->current == other.current;
+}
+
+template <class T> typename List<T>::Iterator List<T>::iterator::operator+= (size_t n) {
+	while (n--) (*this)++;
+	return *this;
+}
+
 template <class T> typename List<T>::Iterator List<T>::iterator::operator++ (int) {
-	List<T>::Iterator tmp(*this);
+	List<T>::iterator tmp(*this);
 	current = current->next;
 	return tmp;
 }
