@@ -110,7 +110,8 @@ int priority(std::string op) {
 	if (op == "*" || op == "/") return 1;
 	if (op == "^") return 2;
 	else return 3;
-=======
+}
+
 template<int rows, int cols>
 int ilands(int(&mass)[rows][cols]) noexcept {
 	DSU map(rows * cols);
