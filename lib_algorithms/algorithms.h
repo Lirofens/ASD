@@ -5,6 +5,7 @@
 #define PI 3.14159
 
 #include "stack.h"
+#include "DSU.h"
 #include <string>
 #include <cmath>
 #include <iomanip>
@@ -37,7 +38,9 @@ double get_number(const std::string& var) {
 	}
 }
 
-bool check_brackets(std::string str) {
+
+bool check_breckets(std::string str) {
+
 	Stack<char> stack(str.size());
 	for (const auto el : str) {
 		if (findC(el, "([{")) stack.push(el);
@@ -107,5 +110,25 @@ int priority(std::string op) {
 	if (op == "*" || op == "/") return 1;
 	if (op == "^") return 2;
 	else return 3;
+=======
+template<int rows, int cols>
+int ilands(int(&mass)[rows][cols]) noexcept {
+	DSU map(rows * cols);
+	int count0 = 0, count = 0;
+	for (size_t i = 0; i < rows; ++i)
+		for (size_t j = 0; j < cols; ++j) {
+			if (mass[i][j]) {
+				if (mass[i][j + 1] && j != cols - 1)
+					map.unite(cols * i + j, cols * i + j + 1);
+				if (mass[i + 1][j] && i != rows - 1)
+					map.unite(cols * i + j, cols * (i + 1) + j);
+			}
+			else count0++;
+		}
+
+	for (size_t i = 0; i < rows * cols; ++i)
+		if (map.find(i) == i) count++;
+	return count - count0;
+
 }
 #endif
