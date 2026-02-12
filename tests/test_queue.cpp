@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 #include "../lib_queue/queue.h"
+#include "../lib_stack/stack.h"
 
 TEST(TestQueueLib, can_create_with_def_constr) {
     ASSERT_NO_THROW(Queue<int> a);
