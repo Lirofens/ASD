@@ -44,7 +44,6 @@ public:
 
 		iterator& operator= (const iterator& other);
 		T& operator* ();
-		T& operator-> ();
 		bool operator!= (const iterator& other);
 		iterator operator++ (int); //x++
 		iterator& operator++ ();   //++x
